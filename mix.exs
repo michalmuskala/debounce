@@ -11,7 +11,8 @@ defmodule Debounce.Mixfile do
   end
 
   def application do
-    [extra_applications: []]
+    [extra_applications: [],
+     mod: {Debounce.Application, []}]
   end
 
   defp deps do

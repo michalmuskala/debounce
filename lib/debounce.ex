@@ -68,7 +68,7 @@ defmodule Debounce do
   end
 
   def counting(:state_timeout, {m, f, a}, data) do
-    apply(m, f, a)
+    Task.Supervisor.start_child(Debounce.Supervisor, m, f, a)
     {:next_state, :waiting, data}
   end
 
