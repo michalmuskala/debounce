@@ -1,4 +1,6 @@
 defmodule Debounce.Application do
+  @moduledoc false
+
   use Application
 
   import Supervisor.Spec

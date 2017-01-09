@@ -84,7 +84,8 @@ defmodule Debounce do
   Schedules call to the current `debouncer`'s function.
 
   If the function is a fun, calls it with provided `args`.
-  If the function is an `t:mfargs` appends provided `args` to the original ones.
+  If the function is an `t:mfargs/0` tuple, appends provided `args`
+  to the original ones.
 
   If this function is called again withing the current `debouncer`'s timeout
   value, the time will reset.
@@ -106,7 +107,8 @@ defmodule Debounce do
   Immediately invokes the current `debouncer`'s function.
 
   If the function is a fun, calls it with provided `args`.
-  If the function is an `t:mfargs` appends provided `args` to the original ones.
+  If the function is an `t:mfargs/0` tuple, appends provided `args`
+  to the original ones.
   """
   @spec flush(debouncer, [term]) :: :ok
   def flush(debouncer, args) do
@@ -137,7 +139,7 @@ defmodule Debounce do
 
   import Record
 
-  defrecord :data, [:apply, :timeout]
+  defrecordp :data, [:apply, :timeout]
 
   @doc false
   def callback_mode, do: :state_functions
