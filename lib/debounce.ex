@@ -236,7 +236,7 @@ defmodule Debounce do
   end
 
   defp name(nil), do: nil
-  defp name(atom) when is_atom(atom), do: atom
+  defp name(atom) when is_atom(atom), do: {:local, atom}
   defp name(other), do: other
 
   defp call(debounce, request) do
