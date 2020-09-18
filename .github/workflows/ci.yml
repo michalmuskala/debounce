@@ -26,7 +26,7 @@ jobs:
           - elixir: 1.10.x
             otp: 21.3.8.17
           - elixir: 1.10.x
-            otp: 23.0.3
+            otp: 23.0.4
             warnings_as_errors: true
             static_analysis: true
     env:
@@ -53,4 +53,6 @@ jobs:
         if: matrix.warnings_as_errors
       - run: mix test
       - run: mix dialyzer --halt-exit-status
+        if: matrix.static_analysis
+      - run: mix format --check-formatted
         if: matrix.static_analysis
