@@ -41,7 +41,7 @@ defmodule Debounce.Mixfile do
       main: "Debounce",
       name: "Debounce",
       source_ref: "v#{@version}",
-      source_url: "https://github.com/michalmuskala/debounce",
+      source_url: "https://github.com/michalmuskala/debounce"
     ]
   end
 end
