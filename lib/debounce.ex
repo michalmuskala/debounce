@@ -31,15 +31,15 @@ defmodule Debounce do
   @type mfargs :: {module, atom, [term]}
   @type apply :: (() -> term) | mfargs
   @type time :: non_neg_integer
-  @type debouncer :: :gen_statem.server_ref
-  @type option :: {:name, GenServer.name} | :gen_statem.start_opt
+  @type debouncer :: :gen_statem.server_ref()
+  @type option :: {:name, GenServer.name()} | :gen_statem.start_opt()
 
   defmacrop is_apply(apply) do
     quote do
       is_function(unquote(apply)) or
         (is_atom(elem(unquote(apply), 0)) and
-          is_atom(elem(unquote(apply), 1)) and
-          is_list(elem(unquote(apply), 2)))
+           is_atom(elem(unquote(apply), 1)) and
+           is_list(elem(unquote(apply), 2)))
     end
   end
 
@@ -57,7 +57,7 @@ defmodule Debounce do
     * all other options supported by `:gen_statem.start_link/4`
 
   """
-  @spec start_link(apply, time, [option]) :: :gen_statem.start_ret
+  @spec start_link(apply, time, [option]) :: :gen_statem.start_ret()
   def start_link(apply, timeout, opts \\ []) do
     do_start(:start_link, apply, timeout, opts)
   end
@@ -67,7 +67,7 @@ defmodule Debounce do
 
   See `start_link/3` for more information.
   """
-  @spec start(apply, time, [option]) :: :gen_statem.start_ret
+  @spec start(apply, time, [option]) :: :gen_statem.start_ret()
   def start(apply, timeout, opts \\ []) do
     do_start(:start, apply, timeout, opts)
   end
@@ -165,8 +165,7 @@ defmodule Debounce do
 
   @doc false
   def counting({:call, from}, {:apply, args}, data(apply: apply, timeout: timeout) = data) do
-    {:keep_state, data,
-     [{:reply, from, :ok}, {:state_timeout, timeout, {apply, args}}]}
+    {:keep_state, data, [{:reply, from, :ok}, {:state_timeout, timeout, {apply, args}}]}
   end
 
   def counting({:call, from}, :cancel, data) do
@@ -206,12 +205,15 @@ defmodule Debounce do
   defp handle_event(:info, msg, data) do
     proc =
       case Process.info(self(), :registered_name) do
-        {_, []}   -> self()
+        {_, []} -> self()
         {_, name} -> name
       end
 
-    :error_logger.error_msg('~p ~p received unexpected message: ~p~n',
-      [__MODULE__, proc, msg])
+    :error_logger.error_msg(
+      '~p ~p received unexpected message: ~p~n',
+      [__MODULE__, proc, msg]
+    )
+
     {:keep_state, data}
   end
 
@@ -246,6 +248,7 @@ defmodule Debounce do
   defp apply_function({m, f, a}, args) do
     Task.Supervisor.start_child(Debounce.Supervisor, m, f, a ++ args)
   end
+
   defp apply_function(fun, args) do
     Task.Supervisor.start_child(Debounce.Supervisor, :erlang, :apply, [fun, args])
   end
