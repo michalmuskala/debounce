@@ -1,10 +1,12 @@
 defmodule Debounce.Mixfile do
   use Mix.Project
 
+  @version "1.0.0"
+
   def project do
     [
       app: :debounce,
-      version: "0.1.1",
+      version: @version,
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -35,6 +37,11 @@ defmodule Debounce.Mixfile do
   end
 
   defp docs do
-    [main: "Debounce"]
+    [
+      main: "Debounce",
+      name: "Debounce",
+      source_ref: "v#{@version}",
+      source_url: "https://github.com/michalmuskala/debounce",
+    ]
   end
 end
